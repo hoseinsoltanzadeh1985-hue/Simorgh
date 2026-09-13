@@ -1,13 +1,20 @@
 # Simorgh Web Games
 
-## Backgammon
+The `games/` directory is a self-contained static Mini App site for the Simorgh Game Center.
 
-`backgammon.html` launches the ready-made two-player online Backgammon Web App from `99fk/backgammon-html`.
+## Game Center
 
-- Mode: Player vs Player online
-- Transport: browser-to-browser WebRTC in the upstream project
-- License: GPL-3.0
-- Upstream: https://github.com/99fk/backgammon-html
-- Online page: https://99fk.github.io/backgammon-html/bg-online.html
+- `index.html` — main game page with two visual cards and launch buttons.
+- `retro-flight.html` — lightweight non-combat retro flight arcade.
+- `backgammon.html` — lightweight touch-friendly backgammon board for local play/testing.
+- `assets/` — preview artwork used by the games area.
 
-The upstream copyright/license notice is retained by the upstream project. This repository only contains a launcher/bridge page and does not re-license the upstream game.
+## Hosting
+
+A GitHub Pages workflow is included at `.github/workflows/games-pages.yml`. After GitHub Pages is enabled for the repository, the games are served as normal HTTPS static pages, which is suitable for Telegram Web Apps.
+
+Expected Pages base URL:
+
+`https://hoseinsoltanzadeh1985-hue.github.io/Simorgh/games/`
+
+The game pages contain no server credentials and do not require Supabase for basic play.
