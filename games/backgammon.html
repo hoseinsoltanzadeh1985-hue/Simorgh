@@ -1,16 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Simorgh Backgammon — 2 Player</title>
-  <meta http-equiv="refresh" content="0; url=https://99fk.github.io/backgammon-html/bg-online.html">
-  <script>
-    location.replace('https://99fk.github.io/backgammon-html/bg-online.html');
-  </script>
-</head>
-<body>
-  <p>Opening the two-player Backgammon Web App…</p>
-  <p><a href="https://99fk.github.io/backgammon-html/bg-online.html">Open Backgammon</a></p>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Simorgh • Backgammon</title>
+<style>
+:root{--bg:#08101d;--panel:#101a2d;--line:#2a3a59;--gold:#e5b95c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#1d335a,#070b13 65%);font-family:system-ui,-apple-system,Segoe UI,Tahoma,sans-serif;color:#eef4ff;min-height:100vh;display:grid;place-items:center;padding:14px}.app{width:min(760px,100%)}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.brand{font-weight:850}.sub{font-size:12px;opacity:.65}.panel{background:linear-gradient(180deg,#152039,#0d1525);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 18px 60px #0009}.status{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#0a1120;font-size:12px}.board{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:linear-gradient(90deg,#5e3b22,#9a6238,#5e3b22);border:9px solid #3a2316;border-radius:18px;padding:8px;box-shadow:inset 0 0 0 2px #d39a54,0 18px 35px #0008}.half{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;background:#704827;padding:6px;border-radius:12px}.pt{min-height:190px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:3px;overflow:hidden}.pt:nth-child(odd){background:#9b6844}.pt:nth-child(even){background:#d3a36d}.pt.bottom{justify-content:flex-end}.num{font-size:10px;color:#321a0b;opacity:.75}.checker{width:38px;height:38px;border-radius:50%;border:2px solid #ffffff66;box-shadow:0 3px 7px #0008;flex:0 0 auto}.white{background:radial-gradient(circle at 30% 25%,#fff,#d4d4cc);border-color:#8c8c84}.black{background:radial-gradient(circle at 30% 25%,#5d6775,#171b22);border-color:#090c10}.selected{outline:3px solid var(--gold);outline-offset:-3px}.info{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}.dice{font-size:28px;font-weight:900;letter-spacing:4px;min-width:110px;text-align:center}.btns{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #395074;background:#162441;color:#fff;padding:10px 13px;border-radius:12px;font-weight:750;cursor:pointer}.btn.primary{background:#b57a25;border-color:#dbab59;color:#160d05}.tip{font-size:12px;opacity:.72;margin-top:10px;line-height:1.75}@media(max-width:560px){.board{gap:5px;padding:6px;border-width:7px}.half{gap:3px;padding:4px}.pt{min-height:145px}.checker{width:29px;height:29px}.info{align-items:flex-start;flex-direction:column}}
+</style></head>
+<body><main class="app"><div class="top"><div><div class="brand">🎲 Simorgh Backgammon</div><div class="sub">بازی دو نفره سبک برای Telegram Mini App</div></div><button class="btn" id="reset">شروع دوباره</button></div><section class="panel"><div class="status"><span class="pill" id="turn">نوبت: سفید</span><span class="pill" id="moves">تاس: —</span><span class="pill">بدون نصب</span></div><div class="board" id="board"></div><div class="info"><div class="dice" id="dice">— —</div><div class="btns"><button class="btn primary" id="roll">🎲 تاس بریز</button><button class="btn" id="pass">رد نوبت</button></div></div><div class="tip">تاس بریز، مهرهٔ خودت را انتخاب کن و سپس مقصدی هم‌جهت با حرکت را لمس کن. این نسخهٔ سبک و آفلاین برای تست Mini App طراحی شده است.</div></section></main>
+<script>
+const state={p:Array(24).fill(0),turn:1,dice:[],selected:null};
+function reset(){state.p.fill(0);[[0,2],[5,-5],[7,-3],[11,5],[12,-5],[16,3],[18,5],[23,-2]].forEach(([i,n])=>state.p[i]=n);state.turn=1;state.dice=[];state.selected=null;render()}
+function render(){const b=document.getElementById('board');b.innerHTML='';for(let h=0;h<2;h++){const half=document.createElement('div');half.className='half';const ids=h?Array.from({length:12},(_,k)=>11-k):Array.from({length:12},(_,k)=>k+12);ids.forEach(i=>{const pt=document.createElement('div');pt.className='pt'+(i>=12?' bottom':'');if(state.selected===i)pt.classList.add('selected');const num=document.createElement('div');num.className='num';num.textContent=i+1;pt.appendChild(num);const n=Math.abs(state.p[i]);for(let k=0;k<n;k++){const c=document.createElement('div');c.className='checker '+(state.p[i]>0?'white':'black');if(k>5)c.style.transform='scale(.8)';pt.appendChild(c)}pt.onclick=()=>pick(i);half.appendChild(pt)});b.appendChild(half)}document.getElementById('turn').textContent='نوبت: '+(state.turn===1?'سفید':'مشکی');document.getElementById('moves').textContent='تاس: '+(state.dice.length?state.dice.join(' ، '):'—');document.getElementById('dice').textContent=state.dice.length?state.dice.join('  '):'— —'}
+function roll(){if(state.dice.length)return;const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);state.dice=a===b?[a,a,a,a]:[a,b];render()}
+function pick(i){if(!state.dice.length)return;const mine=state.turn===1?state.p[i]>0:state.p[i]<0;if(mine){state.selected=i;render();return}if(state.selected===null)return;const from=state.selected,dist=Math.abs(i-from),dir=state.turn===1?1:-1;if((i-from)*dir<=0||!state.dice.includes(dist))return;state.p[from]-=state.turn;state.p[i]+=state.turn;state.dice.splice(state.dice.indexOf(dist),1);state.selected=null;if(!state.dice.length)state.turn=-state.turn;render()}
+document.getElementById('roll').onclick=roll;document.getElementById('pass').onclick=()=>{state.dice=[];state.selected=null;state.turn=-state.turn;render()};document.getElementById('reset').onclick=reset;reset();
+</script></body></html>
