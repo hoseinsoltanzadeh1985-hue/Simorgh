@@ -12,16 +12,27 @@ The supplied reference uses a vertical arcade layout with a score HUD, high scor
 
 The supplied reference shows a polished two-player mobile board with player status, dice, turn flow, settings and chat-style controls. The launcher keeps the same mobile-first visual hierarchy and opens the GPL-3.0 upstream game for the full ruleset and online two-player mode. The upstream project documents valid moves, hitting, bar entry, bearing off, sound, responsive layout and WebRTC online play.
 
-Upstream: `https://github.com/99fk/backgammon-html`
-Online game: `https://99fk.github.io/backgammon-html/bg-online.html`
+### Voice Wheel
 
-This repository does not claim the upstream code as its own and does not remove its license/copyright notice.
+The wheel is a non-monetary current-voice-call selection utility. It is designed around the requested behavior:
+
+- The source roster is the people present at execution time; no attendance weighting or old-history weighting is used.
+- The administrator chooses how many people to select (bounded by the supplied roster size in the UI).
+- Each participant is rendered as their display name plus `(@username)` when a username exists; otherwise only the display name is shown.
+- Every spin selects exactly one remaining participant at random.
+- The selected participant is shown prominently as the winner, recorded in the winners panel, and removed from the wheel before the next spin.
+- Spinning continues until the requested number of winners is reached or the current roster is exhausted.
+- The page accepts a base64url JSON roster in the URL fragment (`#data=...`) and an optional `?count=N`, so participant data is not sent as an HTTP request to the static host.
+- When opened without roster data, a small demo roster is used strictly for UI testing.
+
+For the production Telegram integration, the trusted worker/backend must obtain the current voice roster and generate the `count` + fragment payload. The static page is not an authorization boundary and must not be used to infer Telegram membership or permissions by itself.
 
 ## Architecture
 
 - `index.html` — Game Center entry point.
 - `retro-flight.html` — single-file Canvas game with local high score and Telegram WebApp initialization.
 - `backgammon.html` — branded Mini App launcher/preview for the upstream full-rules game.
+- `voice-wheel.html` — multi-winner voice-call wheel UI with sequential elimination.
 - `tests/smoke.mjs` — dependency-free static regression checks.
 - `.github/workflows/games-pages.yml` — smoke test + GitHub Pages deployment.
 
